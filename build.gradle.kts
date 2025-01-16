@@ -9,6 +9,14 @@ plugins {
 group = "rs.jamie"
 version = "1.0.0"
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(16))
+        sourceCompatibility = JavaVersion.VERSION_16
+        targetCompatibility = JavaVersion.VERSION_16
+    }
+}
+
 repositories {
     mavenCentral()
     maven {
