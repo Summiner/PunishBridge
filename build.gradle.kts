@@ -48,6 +48,19 @@ tasks {
     }
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])  // Publish the main Java component
+            artifact(tasks["shadowJar"])  // Publish the shadowed JAR
+        }
+    }
+
+    repositories {
+        mavenLocal()  // This tells Gradle to publish to Maven Local
+    }
+}
+
 tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
 }
