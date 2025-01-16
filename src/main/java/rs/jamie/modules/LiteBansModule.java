@@ -44,13 +44,13 @@ public class LiteBansModule {
                 PunishType punishType = PunishType.NULL;
                 switch (entry.getType()) {
                     case "ban":
-                        punishType = PunishType.KICK;
+                        punishType = PunishType.BAN;
                         break;
                     case "mute":
-                        punishType = PunishType.KICK;
+                        punishType = PunishType.MUTE;
                         break;
                     case "warn":
-                        punishType = PunishType.KICK;
+                        punishType = PunishType.WARN;
                         break;
                 }
                 Punishment punishment = new Punishment(true, punishType, UUID.fromString(entry.getUuid()), UUID.fromString(entry.getRemovedByUUID()), entry.getReason(), entry.getServerOrigin());

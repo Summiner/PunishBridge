@@ -11,7 +11,6 @@ version = "1.0.0"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(16))
         sourceCompatibility = JavaVersion.VERSION_16
         targetCompatibility = JavaVersion.VERSION_16
     }
@@ -53,10 +52,7 @@ tasks {
 publishing {
     publications {
         create<MavenPublication>("mavenShadow") {
-            from(components["java"])  // Publish the main Java component
-            artifact(tasks["shadowJar"]) {
-                classifier = "all"  // Add a classifier to the shadow jar
-            }
+            from(components["java"])
         }
     }
 
