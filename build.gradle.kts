@@ -52,7 +52,7 @@ tasks {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("mavenShadow") {
             from(components["java"])  // Publish the main Java component
             artifact(tasks["shadowJar"]) {
                 classifier = "all"  // Add a classifier to the shadow jar
