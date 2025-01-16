@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id("com.gradleup.shadow") version "9.0.0-beta4"
+    id("com.github.johnrengelman.shadow") version "8.1.1" apply true
     `java-library`
     `maven-publish`
 }
