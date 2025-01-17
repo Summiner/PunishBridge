@@ -1,6 +1,7 @@
 package rs.jamie.modules;
 
 import me.leoko.advancedban.bukkit.event.PunishmentEvent;
+import me.leoko.advancedban.bukkit.event.RevokePunishmentEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,27 +21,18 @@ public class AdvancedBanModule implements Listener {
         this.punishDispatch = punishDispatch;
     }
 
-    @EventHandler
-    private void onBan(PunishmentEvent event) {
+    private void trigger(me.leoko.advancedban.utils.Punishment punishment, boolean revoked) {
         PunishType punishType = PunishType.NULL;
-        Boolean ipban = false;
-        switch (event.getPunishment().getType()) {
-            case BAN:
+        boolean ipBan = false;
+        switch (punishment.getType()) {
+            case BAN, TEMP_BAN:
                 punishType = PunishType.BAN;
                 break;
-            case TEMP_BAN:
+            case IP_BAN, TEMP_IP_BAN:
                 punishType = PunishType.BAN;
-                break;
-            case IP_BAN:
-                punishType = PunishType.BAN;
-                ipban = true;
-                break;
-            case TEMP_IP_BAN:
-                punishType = PunishType.BAN;
-                ipban = true;
+                ipBan = true;
                 break;
             case MUTE, TEMP_MUTE:
-                punishType = PunishType.MUTE;
                 punishType = PunishType.MUTE;
                 break;
             case WARNING, TEMP_WARNING:
@@ -50,8 +42,21 @@ public class AdvancedBanModule implements Listener {
                 punishType = PunishType.KICK;
                 break;
         }
-        Punishment punishment = new Punishment(false, punishType, FastUuidSansHyphens.parseUuid(event.getPunishment().getUuid()), Bukkit.getPlayerUniqueId(event.getPunishment().getOperator()), event.getPunishment().getReason(), event.getPunishment().getEnd(), null, ipban);
-        punishDispatch.dispatchEvent(new PunishEvent(punishment));
+        UUID punished = FastUuidSansHyphens.parseUuid(punishment.getUuid());
+        UUID punisher = Bukkit.getPlayerUniqueId(punishment.getOperator());
+        Punishment p = new Punishment(revoked, punishType, punished, punisher, punishment.getReason(), punishment.getEnd(), null, ipBan);
+        punishDispatch.dispatchEvent(new PunishEvent(p));
+
+    }
+
+    @EventHandler
+    private void onUnban(RevokePunishmentEvent event) {
+        trigger(event.getPunishment(), true);
+    }
+
+    @EventHandler
+    private void onBan(PunishmentEvent event) {
+        trigger(event.getPunishment(), false);
     }
 
 
