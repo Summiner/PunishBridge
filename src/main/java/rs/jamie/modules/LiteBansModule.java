@@ -17,44 +17,31 @@ public class LiteBansModule {
         this.punishDispatch = punishDispatch;
     }
 
+    private void trigger(Entry entry, boolean revoked) {
+        PunishType punishType = switch (entry.getType()) {
+            case "ban" -> PunishType.BAN;
+            case "mute" -> PunishType.MUTE;
+            case "warn" -> PunishType.WARN;
+            case "kick" -> PunishType.KICK;
+            default -> PunishType.NULL;
+        };
+        if(entry.getUuid()==null) return;
+        UUID punished = UUID.fromString(entry.getUuid());
+        UUID punisher = entry.getExecutorUUID()!=null?UUID.fromString(entry.getExecutorUUID()):null;
+        Punishment punishment = new Punishment(revoked, punishType, punished, punisher, entry.getReason(), entry.getDateEnd(), entry.getServerOrigin(), entry.isIpban());
+        punishDispatch.dispatchEvent(new PunishEvent(punishment));
+
+    }
+
     public void register() {
         Events.get().register(new Events.Listener() {
             @Override
             public void entryAdded(Entry entry) {
-                PunishType punishType = PunishType.NULL;
-                switch (entry.getType()) {
-                    case "ban":
-                        punishType = PunishType.BAN;
-                        break;
-                    case "mute":
-                        punishType = PunishType.MUTE;
-                        break;
-                    case "warn":
-                        punishType = PunishType.WARN;
-                        break;
-                    case "kick":
-                        punishType = PunishType.KICK;
-                        break;
-                }
-                Punishment punishment = new Punishment(false, punishType, UUID.fromString(entry.getUuid()), UUID.fromString(entry.getExecutorUUID()), entry.getReason(), entry.getDateEnd(), entry.getServerOrigin(), entry.isIpban());
-                punishDispatch.dispatchEvent(new PunishEvent(punishment));
+                trigger(entry, false);
             }
             @Override
             public void entryRemoved(Entry entry) {
-                PunishType punishType = PunishType.NULL;
-                switch (entry.getType()) {
-                    case "ban":
-                        punishType = PunishType.BAN;
-                        break;
-                    case "mute":
-                        punishType = PunishType.MUTE;
-                        break;
-                    case "warn":
-                        punishType = PunishType.WARN;
-                        break;
-                }
-                Punishment punishment = new Punishment(true, punishType, UUID.fromString(entry.getUuid()), UUID.fromString(entry.getRemovedByUUID()), entry.getReason(), null, entry.getServerOrigin(), entry.isIpban());
-                punishDispatch.dispatchEvent(new PunishEvent(punishment));
+                trigger(entry, true);
             }
         });
 
