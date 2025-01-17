@@ -36,7 +36,7 @@ public class LiteBansModule {
                         punishType = PunishType.KICK;
                         break;
                 }
-                Punishment punishment = new Punishment(false, punishType, UUID.fromString(entry.getUuid()), UUID.fromString(entry.getExecutorUUID()), entry.getReason(), entry.getServerOrigin());
+                Punishment punishment = new Punishment(false, punishType, UUID.fromString(entry.getUuid()), UUID.fromString(entry.getExecutorUUID()), entry.getReason(), entry.getDateEnd(), entry.getServerOrigin(), entry.isIpban());
                 punishDispatch.dispatchEvent(new PunishEvent(punishment));
             }
             @Override
@@ -53,7 +53,7 @@ public class LiteBansModule {
                         punishType = PunishType.WARN;
                         break;
                 }
-                Punishment punishment = new Punishment(true, punishType, UUID.fromString(entry.getUuid()), UUID.fromString(entry.getRemovedByUUID()), entry.getReason(), entry.getServerOrigin());
+                Punishment punishment = new Punishment(true, punishType, UUID.fromString(entry.getUuid()), UUID.fromString(entry.getRemovedByUUID()), entry.getReason(), null, entry.getServerOrigin(), entry.isIpban());
                 punishDispatch.dispatchEvent(new PunishEvent(punishment));
             }
         });

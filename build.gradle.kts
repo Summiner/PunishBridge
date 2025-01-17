@@ -24,11 +24,16 @@ repositories {
     maven {
         url = uri("https://jitpack.io")
     }
+    maven {
+        url = uri("https://repo.codemc.io/repository/maven-public/")
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.17-R0.1-SNAPSHOT")
     compileOnly("com.gitlab.ruany:LiteBansAPI:0.5.0")
+    compileOnly("com.github.DevLeoko:AdvancedBan:v2.3.0")
+
 }
 
 tasks {
