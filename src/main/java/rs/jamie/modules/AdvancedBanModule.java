@@ -2,9 +2,12 @@ package rs.jamie.modules;
 
 import me.leoko.advancedban.bukkit.event.PunishmentEvent;
 import me.leoko.advancedban.bukkit.event.RevokePunishmentEvent;
+import me.leoko.advancedban.manager.PunishmentManager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.Nullable;
 import rs.jamie.PunishDispatch;
 import rs.jamie.PunishEvent;
 import rs.jamie.PunishType;
@@ -13,7 +16,7 @@ import rs.jamie.utils.FastUuidSansHyphens;
 
 import java.util.UUID;
 
-public class AdvancedBanModule implements Listener {
+public class AdvancedBanModule implements Listener, Module {
 
     private final PunishDispatch punishDispatch;
 
@@ -59,5 +62,14 @@ public class AdvancedBanModule implements Listener {
         trigger(event.getPunishment(), false);
     }
 
+    @Override
+    public boolean isMuted(UUID uuid, @Nullable String ip) {
+        return PunishmentManager.get().isMuted(uuid.toString());
+    }
+
+    @Override
+    public boolean isBanned(UUID uuid, @Nullable String ip) {
+        return PunishmentManager.get().isBanned(uuid.toString());
+    }
 
 }

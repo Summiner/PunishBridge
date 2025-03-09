@@ -1,15 +1,20 @@
 package rs.jamie.modules;
 
+import litebans.api.Database;
 import litebans.api.Entry;
 import litebans.api.Events;
+import me.leoko.advancedban.manager.PunishmentManager;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import rs.jamie.PunishDispatch;
 import rs.jamie.PunishEvent;
 import rs.jamie.PunishType;
 import rs.jamie.Punishment;
 
+import java.net.InetSocketAddress;
 import java.util.UUID;
 
-public class LiteBansModule {
+public class LiteBansModule implements Module {
 
     private final PunishDispatch punishDispatch;
 
@@ -44,7 +49,18 @@ public class LiteBansModule {
                 trigger(entry, true);
             }
         });
+    }
 
+    @Override
+    public boolean isMuted(UUID uuid, @Nullable String ip) {
+        //InetSocketAddress address = player.getAddress();
+        //return Database.get().isPlayerMuted(player.getUniqueId(), address!=null?address.getAddress().toString():null);
+        return Database.get().isPlayerMuted(uuid, ip);
+    }
+
+    @Override
+    public boolean isBanned(UUID uuid, @Nullable String ip) {
+        return Database.get().isPlayerBanned(uuid, ip);
     }
 
 }
