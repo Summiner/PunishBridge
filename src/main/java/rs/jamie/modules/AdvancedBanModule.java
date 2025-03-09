@@ -64,12 +64,12 @@ public class AdvancedBanModule implements Listener, Module {
 
     @Override
     public boolean isMuted(UUID uuid, @Nullable String ip) {
-        return PunishmentManager.get().isMuted(uuid.toString());
+        return PunishmentManager.get().isMuted(uuid.toString().replaceAll("-", ""));
     }
 
     @Override
     public boolean isBanned(UUID uuid, @Nullable String ip) {
-        return PunishmentManager.get().isBanned(uuid.toString());
+        return PunishmentManager.get().isBanned(uuid.toString().replaceAll("-", ""));
     }
 
 }
