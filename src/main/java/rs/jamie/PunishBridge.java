@@ -1,8 +1,6 @@
 package rs.jamie;
 
-import jdk.javadoc.doclet.DocletEnvironment;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 import rs.jamie.modules.AdvancedBanModule;

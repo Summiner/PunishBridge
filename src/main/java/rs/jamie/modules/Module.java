@@ -1,6 +1,5 @@
 package rs.jamie.modules;
 
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

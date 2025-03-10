@@ -3,15 +3,13 @@ package rs.jamie.modules;
 import litebans.api.Database;
 import litebans.api.Entry;
 import litebans.api.Events;
-import me.leoko.advancedban.manager.PunishmentManager;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import rs.jamie.PunishDispatch;
 import rs.jamie.PunishEvent;
 import rs.jamie.PunishType;
 import rs.jamie.Punishment;
 
-import java.net.InetSocketAddress;
+import java.util.Objects;
 import java.util.UUID;
 
 public class LiteBansModule implements Module {
@@ -32,10 +30,11 @@ public class LiteBansModule implements Module {
         };
         if(entry.getUuid()==null) return;
         UUID punished = UUID.fromString(entry.getUuid());
-        UUID punisher = entry.getExecutorUUID()!=null?UUID.fromString(entry.getExecutorUUID()):null;
+        UUID punisher;
+        if(Objects.equals(entry.getExecutorUUID(), "CONSOLE")) punisher = UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670");
+        else punisher = entry.getExecutorUUID()!=null?UUID.fromString(entry.getExecutorUUID()):null;
         Punishment punishment = new Punishment(revoked, punishType, punished, punisher, entry.getReason(), entry.getDateEnd(), entry.getServerOrigin(), entry.isIpban());
         punishDispatch.dispatchEvent(new PunishEvent(punishment));
-
     }
 
     public void register() {
