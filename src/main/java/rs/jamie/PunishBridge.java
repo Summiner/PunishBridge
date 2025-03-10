@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 import rs.jamie.modules.AdvancedBanModule;
+import rs.jamie.modules.BackupModule;
 import rs.jamie.modules.LiteBansModule;
 import rs.jamie.modules.Module;
 
@@ -20,12 +21,7 @@ public class PunishBridge {
     }
 
     public void start() {
-//        punishDispatch.addListener(new PunishListener() {
-//            @Override
-//            public void onPunishment(PunishEvent event) {
-//
-//            }
-//        });
+        module = new BackupModule(); // Backup module incase no punishment system is loaded
 
         Plugin litebans = Bukkit.getPluginManager().getPlugin("LiteBans");
         if(litebans!=null&&litebans.isEnabled()) {
