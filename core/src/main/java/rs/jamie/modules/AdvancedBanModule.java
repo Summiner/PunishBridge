@@ -6,6 +6,7 @@ import me.leoko.advancedban.manager.PunishmentManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 import rs.jamie.PunishDispatch;
 import rs.jamie.PunishEvent;
@@ -13,7 +14,9 @@ import rs.jamie.PunishType;
 import rs.jamie.Punishment;
 import rs.jamie.utils.FastUuidSansHyphens;
 
+import java.net.InetAddress;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class AdvancedBanModule implements Listener, Module {
 
@@ -21,6 +24,11 @@ public class AdvancedBanModule implements Listener, Module {
 
     public AdvancedBanModule(PunishDispatch punishDispatch) {
         this.punishDispatch = punishDispatch;
+    }
+
+    @Override
+    public void execute(Plugin plugin) {
+        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     private void trigger(me.leoko.advancedban.utils.Punishment punishment, boolean revoked) {
@@ -46,7 +54,7 @@ public class AdvancedBanModule implements Listener, Module {
         }
         UUID punished = FastUuidSansHyphens.parseUuid(punishment.getUuid());
         UUID punisher = Bukkit.getPlayerUniqueId(punishment.getOperator());
-        Punishment p = new Punishment(revoked, punishType, punished, punisher, punishment.getReason(), punishment.getEnd(), null, ipBan);
+        Punishment p = new Punishment(revoked, punishType, punished, null, punisher, punishment.getReason(), punishment.getEnd(), null, ipBan);
         punishDispatch.dispatchEvent(new PunishEvent(p));
 
     }
@@ -62,13 +70,13 @@ public class AdvancedBanModule implements Listener, Module {
     }
 
     @Override
-    public boolean isMuted(UUID uuid, @Nullable String ip) {
-        return PunishmentManager.get().isMuted(uuid.toString().replaceAll("-", ""));
+    public CompletableFuture<Boolean> isMuted(UUID uuid, @Nullable InetAddress address) {
+        return CompletableFuture.supplyAsync(() -> PunishmentManager.get().isMuted(uuid.toString().replaceAll("-", "")));
     }
 
     @Override
-    public boolean isBanned(UUID uuid, @Nullable String ip) {
-        return PunishmentManager.get().isBanned(uuid.toString().replaceAll("-", ""));
+    public CompletableFuture<Boolean> isBanned(UUID uuid, @Nullable InetAddress address) {
+        return CompletableFuture.supplyAsync(() -> PunishmentManager.get().isBanned(uuid.toString().replaceAll("-", "")));
     }
 
 }
